@@ -19,7 +19,7 @@ A histogram is a plot that lets you discover, and show, the underlying frequency
 
 This allows the inspection of the data for its underlying distribution (e.g., normal distribution), outliers, skewness, etc. An example of a histogram, and the raw data it was constructed from, is shown below:
 
-![A Histogram](/https://statistics.laerd.com/statistical-guides/img/uh/laerd-statistics-example-histogram-frequencies-for-age.png)
+![A Histogram](https://statistics.laerd.com/statistical-guides/img/uh/laerd-statistics-example-histogram-frequencies-for-age.png)
 
 ### How to describe a histogram
 
