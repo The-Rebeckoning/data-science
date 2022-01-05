@@ -41,7 +41,7 @@ The major difference is that a histogram is only used to plot the frequency of s
 
 In descriptive statistics, a box plot or boxplot is a method for graphically demonstrating the locality, spread and skewness groups of numerical data through their quartiles. Used to show the range in values but doesn't provide info about the shape of the data. 
 
-![A Boxplot](/https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKtcWQ1Uwh81ao9VdRj9QtS3n6x8WpNUp5CQ&usqp=CAU)
+![A Boxplot](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKtcWQ1Uwh81ao9VdRj9QtS3n6x8WpNUp5CQ&usqp=CAU)
 
 
 ### How to describe a boxplot
