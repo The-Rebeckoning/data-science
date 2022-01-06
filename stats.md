@@ -94,3 +94,16 @@ Correlation or dependence is any statistical relationship, whether causal or not
 - Pearson correlation is the one most commonly used in statistics. This measures the strength and direction of a linear relationship between two variables.
 - Values always range between -1 (strong negative relationship) and +1 (strong positive relationship). Values at or close to zero imply a weak or no linear relationship.
 - Correlation coefficient values less than +0.8 or greater than -0.8 are not considered significant.
+
+
+# The Empirical Rule and Distribution
+
+The empirical rule or the 68 - 95 - 99.7 rule describes how many observations fall within a certain distance from our mean.  This distance from the mean is denoted as sigma, or standard deviation (the average distance an observation is from the mean).
+
+![Three Sigma Rule](https://miro.medium.com/max/1400/1*IZ2II2HYKeoMrdLU5jW6Dw.png)
+
+# Sampling distribution of the mean
+
+Sampling distributions describe how the value of a statistic computed from data varies when repeated samples of data are obtained.  This can be explored mathematically, or by using a computer to simulate data repeatedly from a hypothetical population.  When working with non-simulated data, we usually do not have the ability to explicitly obtain an "independent copy" of the sample to actually "see" its sampling distribution.  However we can "subsample" from a dataset to mimic what would happen if we were to sample repeatedly from the population that produced it.  A subsample is a random sample drawn from a larger data set, containing only a fraction of its observations.
+
+
