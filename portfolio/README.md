@@ -1,4 +1,5 @@
-# Agree with your enneagram? It depends on your type. 
+# What the enneagram says about the traits we value most
+
 
 This is a Jupyter Notebook where I'll explore the relationship between an individual's enneagram and the likelihood that they agree with their type's description. 
 
