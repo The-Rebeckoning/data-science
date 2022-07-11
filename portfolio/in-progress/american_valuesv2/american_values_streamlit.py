@@ -24,7 +24,7 @@ column_names = {"Q2_1":"Voting",
         "Q2_9":"Believing in God",
         "Q2_10":"Protesting", "Q3_1": "Racism_US","Q3_2": "Racism_Policing"}
 
-# Create the dataframe we'll then filter
+# Create the dataframe we'll then filter- this needs to be finalized for our analysis (eventually)
 df = create_core_df('nonvoters_data.csv', column_names)
 
 label_values = ["22-26","27-31","32-36","37-41","42-46","47-51","52-56","57-61","62-66","67-71","72-76","77-81","82-86","87-91","92-94"]
@@ -36,33 +36,35 @@ create_bins(df,'ppage','age',label_values, bins)
 
 column_selection = ["Voting","Military Support","Believing in God","Protesting","Racism_US","Racism_Policing","weight","age","educ","race","gender","income_cat","voter_category"]
 
-demographic_columns = ["age","educ","race","gender", "income_cat","voter_category"]
+# Rename demographic columns for readibility
+df = df.rename(columns = {"age":"Age","educ":"Education","race":"Race","gender":"Gender","income_cat":"Income","voter_category":"VotingFrequency"})
+
+# Filter dataframe by demographic info for initial exploration of data
+demographic_columns = ["Age","Education","Race","Gender", "Income","VotingFrequency"]
+
+
+
+### INTERACTIVE EXPLORATORY HISTOGRAMS THAT HELP US EXPLORE OUR DATASET
+
 demographic_df = filter_df(df, demographic_columns)
 
+create_subheading("Understanding our data")
+create_text("Learn more about the respondents in our dataset.")
 
 
-### INTERACTIVE EXPLORATORY HISTOGRAMS THAT HELP US EXPLORE OUR DATA
 
-create_heading("Understanding our data")
-
-x_values = ["educ","age","race","gender", "income_cat","voter_category"]
-
-demographic_select = st.selectbox(label="Choose a way to sort the data",options = x_values)
-
-def create_countplot(demographic_select, dataframe):
-    """Creates distribution plot for categorical variables"""
-    plt.figure(figsize=(8,5))
-    plot_title = ("Distribution of "+demographic_select)
-    plt.title(plot_title)
-    sns.countplot(x=demographic_select,data = dataframe, palette='rainbow')
-
-create_countplot(demographic_select, demographic_df)
+demographic_select = st.selectbox(label="Choose a way to sort the data",options = demographic_columns)
 
 
-st.write(filter_df)
+demographic_df_filtered = demographic_df.loc[:,[demographic_select]].value_counts()
+reset_df = demographic_df_filtered.reset_index()
 
 
-## Create a dataframe that is grouped by values (with the counts)
+fig = px.histogram(reset_df, x=demographic_select, y = 0) 
+# Update y axis label
+fig.update_layout(yaxis_title="Distribution in dataset")
+st.write(fig)
+
 ## Graph it 
 
 
