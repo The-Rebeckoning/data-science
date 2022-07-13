@@ -1,11 +1,7 @@
-from email import header
-from venv import create
+
 import streamlit as st
 import plotly.express as px
-import numpy as np
-import matplotlib.pyplot as plt
-import altair as alt
-import seaborn as sns
+
 
 from american_library.main import create_heading
 from american_library.main import create_text
@@ -51,8 +47,6 @@ demographic_df = filter_df(df, demographic_columns)
 create_subheading("Understanding our data")
 create_text("Learn more about the respondents in our dataset.")
 
-
-
 demographic_select = st.selectbox(label="Choose a way to sort the data",options = demographic_columns)
 
 
@@ -65,34 +59,86 @@ fig = px.histogram(reset_df, x=demographic_select, y = 0)
 fig.update_layout(yaxis_title="Distribution in dataset")
 st.write(fig)
 
-## Graph it 
-
-
-
 
 ### INTERACTIVE EXPLORATORY HISTOGRAMS THAT HELP US EXPLORE OUR THE ANSWERES TO OUR QUESTIONS
-
-
-
+create_subheading("What does the general population think about American values?")
+create_text("Learn more about the respondents in our dataset.")
 
 ### Being a good American
-create_heading("Being a Good American")
-create_subheading("***In your view, how important are each of the following to being a good American?***\n")
-create_text("""
-        1. Voting in elections 
-        2. Supporting the military
-        3. Believing in God
-        4. Protesting if you believe government actions are wrong  
-        """)
+# Select the columns we want for our dataset
+good_american_columns = ["Voting","Military Support","Believing in God","Protesting"]
+good_american_df = filter_df(df, good_american_columns)
+
+# Restructure dataframe so that we can have number of responses for reach question
+good_american_df = good_american_df.melt(var_name="Response",value_name="Value")
+good_american_df  = good_american_df[good_american_df["Value"] > 0]
+
+create_subheading("Being a Good American")
+create_subheading("**In your view, how important are each of the following to being a good American?**\n")
 create_subheading("***Responses***\n\n")
 create_text("""
         1. Very important
         2. Somewhat important
         3. Not so important
         4. Not at all important""")
+create_subheading("Voting in elections")
+chart_data = good_american_df[ (good_american_df['Response'] == "Voting" )]
+fig = px.histogram(chart_data, x = "Value", nbins=4,labels=[1,2,3,4],barmode="group")
+st.write(fig)
+create_subheading("Supporting the military")
+chart_data = good_american_df[ (good_american_df['Response'] == "Military Support" )]
+fig = px.histogram(chart_data, x = "Value", nbins=4,labels=[1,2,3,4],barmode="group")
+st.write(fig)
+create_subheading("Believing in God")
+chart_data = good_american_df[ (good_american_df['Response'] == "Believing in God" )]
+fig = px.histogram(chart_data, x = "Value", nbins=4,labels=[1,2,3,4],barmode="group")
+st.write(fig)
+create_subheading("Protesting if you believe government actions are wrong ")
+chart_data = good_american_df[ (good_american_df['Response'] == "Protesting" )]
+fig = px.histogram(chart_data, x = "Value", nbins=4,labels=[1,2,3,4],barmode="group")
+st.write(fig)
+
+
+
 
 ### Systematic Racism
+# Select the columns we want for our dataset
+racism_columns = ["Racism_US","Racism_Policing"]
+racism_df = filter_df(df, racism_columns)
 
+# Restructure dataframe so that we can have number of responses for reach question
+racism_df = racism_df.melt(var_name="Response",value_name="Value")
+racism_df = racism_df[racism_df["Value"] > 0]
+
+"""
+working on replacing 1-4 with statements
+racism_df["Value"] = racism_df.replace(["Strong agree","Somewhat agree","Somewhat disagree","Strongly disagree"],[1,2,3,4])
+st.write(racism_df)
+
+"""
+
+
+
+create_heading("Systematic Racism")
+create_subheading("How much do you agree or disagree with the following statements?")
+create_subheading("***Responses***\n\n")
+
+create_text("""
+        1. Strongly agree
+        2. Somewhat agree
+        3. Somewhat disagree
+        4. Strongly disagree""")
+create_subheading("1. Systemic racism is a problem in the United States.")
+
+chart_data = racism_df[ (racism_df['Response'] == "Racism_US" )]
+fig = px.histogram(chart_data, x = "Value", nbins=4,labels=[1,2,3,4],barmode="group")
+st.write(fig)
+
+create_subheading("""2. Systemic racism in policing is a bigger problem than violence and vandalism in protests.""")
+
+chart_data = racism_df[ (racism_df['Response'] == "Racism_Policing" )]
+fig = px.histogram(chart_data, x = "Value", nbins=4,labels=[1,2,3,4],barmode="group")
+st.write(fig)
 
 
 
