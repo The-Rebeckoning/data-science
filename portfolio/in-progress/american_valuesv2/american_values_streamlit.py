@@ -1,7 +1,8 @@
 
 import streamlit as st
 import plotly.express as px
-
+import numpy as np
+import pandas as pd
 
 from american_library.main import create_heading
 from american_library.main import create_text
@@ -23,6 +24,7 @@ column_names = {"Q2_1":"Voting",
 # Create the dataframe we'll then filter- this needs to be finalized for our analysis (eventually)
 df = create_core_df('nonvoters_data.csv', column_names)
 
+
 label_values = ["22-26","27-31","32-36","37-41","42-46","47-51","52-56","57-61","62-66","67-71","72-76","77-81","82-86","87-91","92-94"]
 bins = [21,26,31,36,41,46,51,56,61,66,71,76,81,86,91,94]
 
@@ -38,6 +40,10 @@ df = df.rename(columns = {"age":"Age","educ":"Education","race":"Race","gender":
 # Filter dataframe by demographic info for initial exploration of data
 demographic_columns = ["Age","Education","Race","Gender", "Income","VotingFrequency"]
 
+good_american_columns = ["Voting","Military Support","Believing in God","Protesting"]
+racism_columns = ["Racism_US","Racism_Policing"]
+
+answer_columns = good_american_columns+racism_columns
 
 
 ### INTERACTIVE EXPLORATORY HISTOGRAMS THAT HELP US EXPLORE OUR DATASET
@@ -64,10 +70,53 @@ st.write(fig)
 create_subheading("What does the general population think about American values?")
 create_text("Learn more about the respondents in our dataset.")
 
+### Create dataframe for specific questions 
+
+full_column_list = demographic_columns+good_american_columns+racism_columns
+
+# Will need to relabel 1-4 as agree and disagree and then group by demographic variables
+
+
+full_df = filter_df(df,full_column_list)
+
+
+# Try with voting
+
+conditions = [
+  np.logical_and(df['Voting'].gt(1), np.less_equal(df['Voting'], 2)),
+  np.logical_and(df['Voting'].gt(2), np.less_equal(df['Voting'], 3)),
+  np.logical_and(df['Voting'].gt(3), np.less_equal(df['Voting'], 4)),
+]
+
+outputs = ["Somewhat important","Not so important","Not at all important"]
+
+
+full_df['Voting-new'] = pd.Series(np.select(conditions, outputs, 'Very important'))
+
+voting_columns = ['Voting-new','Age']
+
+voting_df = filter_df(full_df, voting_columns)
+
+st.write(voting_df.value_counts())
+
+voting_df = voting_df.query('Age=="72-76"')
+
+st.write(voting_df)
+fig = px.histogram(voting_df, x = "Voting-new",color = "Age",barmode="group")
+st.write(fig)
+voting_df = filter_df(full_df, voting_columns)
+fig = px.histogram(voting_df, x = "Voting-new",color = "Age",barmode="group")
+st.write(fig)
+
+st.write(voting_df)
+
+
+
+
 ### Being a good American
 # Select the columns we want for our dataset
-good_american_columns = ["Voting","Military Support","Believing in God","Protesting"]
-good_american_df = filter_df(df, good_american_columns)
+good_american_columns = good_american_columns
+good_american_df = filter_df(full_df, good_american_columns)
 
 # Restructure dataframe so that we can have number of responses for reach question
 good_american_df = good_american_df.melt(var_name="Response",value_name="Value")
@@ -83,8 +132,11 @@ create_text("""
         4. Not at all important""")
 create_subheading("Voting in elections")
 chart_data = good_american_df[ (good_american_df['Response'] == "Voting" )]
-fig = px.histogram(chart_data, x = "Value", nbins=4,labels=[1,2,3,4],barmode="group")
+
+#fig = px.histogram(chart_data, x = "Value", nbins=4,labels=[1,2,3,4],barmode="group")
+fig = px.histogram(chart_data, x = "Value", barmode="group")
 st.write(fig)
+
 create_subheading("Supporting the military")
 chart_data = good_american_df[ (good_american_df['Response'] == "Military Support" )]
 fig = px.histogram(chart_data, x = "Value", nbins=4,labels=[1,2,3,4],barmode="group")
@@ -103,20 +155,12 @@ st.write(fig)
 
 ### Systematic Racism
 # Select the columns we want for our dataset
-racism_columns = ["Racism_US","Racism_Policing"]
+racism_columns = racism_columns
 racism_df = filter_df(df, racism_columns)
 
 # Restructure dataframe so that we can have number of responses for reach question
 racism_df = racism_df.melt(var_name="Response",value_name="Value")
 racism_df = racism_df[racism_df["Value"] > 0]
-
-"""
-working on replacing 1-4 with statements
-racism_df["Value"] = racism_df.replace(["Strong agree","Somewhat agree","Somewhat disagree","Strongly disagree"],[1,2,3,4])
-st.write(racism_df)
-
-"""
-
 
 
 create_heading("Systematic Racism")

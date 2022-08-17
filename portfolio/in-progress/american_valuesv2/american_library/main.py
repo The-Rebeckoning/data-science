@@ -1,6 +1,6 @@
 import streamlit as st
-import plotly.express as px
 import pandas as pd
+import numpy as np
 
 def create_heading (text):
     """Creates a heading"""
@@ -31,5 +31,8 @@ def create_bins(dataframe, column, new_column_name, label_values, bins):
 def filter_df (dataframe, column_selection):
     """Filter the dataframe for the columns we want"""
     core_df = dataframe.copy().loc[:,column_selection]
-    return (core_df)  
+    return (core_df) 
+
+ 
+
 
