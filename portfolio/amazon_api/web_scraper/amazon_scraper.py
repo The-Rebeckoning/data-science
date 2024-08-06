@@ -86,18 +86,19 @@ class AmazonScraper:
         
         return items
 
-    def save_to_csv(self, items, filename):
+    def save_to_csv(self, items):
         """ Saves items to Panadas Dataframe."""
+        items = items
         df = pd.DataFrame(items, columns=["Title", "Price", "Rating", "Review Count", "Prime", "Sustainability"])
         # Print DataFrame content for debugging
         print("DataFrame content before saving:")
         print(df.head())
-        filename = f"{filename}.csv".replace(' ', '_')
+        filename = f"{self.filename}.csv".replace(' ', '_')
         df.to_csv(filename, index=False)
         print(f"Data saved to {filename}")
 
 
-    def scrape_amazon(self, keyword):
+    def scrape_amazon(self):
         all_items = []
         seen_products = []
         page_number = 1
@@ -105,7 +106,7 @@ class AmazonScraper:
         while True:
             print(f"Scraping page {page_number}...")
             try:
-                html = self.get_amazon_page(keyword, page_number)
+                html = self.get_amazon_page(self.keyword, page_number)
                 items = self.parse_amazon_page(html)
                 if not items:
                     print("No more items found.")
